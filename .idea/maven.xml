@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="MavenProjectsManager">
+    <option name="originalFiles">
+      <list>
+        <option value="$PROJECT_DIR$/pom.xml" />
+      </list>
+    </option>
+    <option name="ignoredFiles">
+      <list />
+    </option>
+    <option name="profiles">
+      <set />
+    </option>
+    <option name="settings">
+      <map>
+        <entry key="localRepository" value="$USER_HOME$/.m2/repository" />
+        <entry key="mavenExecutable" value="/c/Program Files/JetBrains/IntelliJ IDEA 2026.2.4/plugins/maven-plugin/lib/maven3/bin/mvn" />
+      </map>
+    </option>
+  </component>
+</project>

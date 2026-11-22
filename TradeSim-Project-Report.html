@@ -1,0 +1,566 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TradeSim - Project Report</title>
+    <style>
+        @page {
+            margin: 2cm;
+            @bottom-center {
+                content: "Page " counter(page) " of " counter(pages);
+                font-size: 10pt;
+                color: #666;
+            }
+        }
+
+        * { box-sizing: border-box; }
+
+        body {
+            font-family: 'Segoe UI', 'Helvetica Neue', Arial, sans-serif;
+            line-height: 1.6;
+            color: #2c3e50;
+            max-width: 100%;
+            margin: 0;
+            padding: 20px;
+            background: #fff;
+        }
+
+        h1, h2, h3, h4 {
+            color: #2c3e50;
+            margin-top: 1.5em;
+            margin-bottom: 0.5em;
+            page-break-after: avoid;
+        }
+
+        h1 {
+            font-size: 28pt;
+            border-bottom: 3px solid #3498db;
+            padding-bottom: 10px;
+            margin-bottom: 20px;
+        }
+
+        h2 {
+            font-size: 20pt;
+            border-bottom: 2px solid #ecf0f1;
+            padding-bottom: 8px;
+            margin-top: 30px;
+        }
+
+        h3 { font-size: 16pt; color: #34495e; margin-top: 20px; }
+        h4 { font-size: 13pt; color: #555; margin-top: 15px; }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+            font-size: 10pt;
+            page-break-inside: avoid;
+        }
+
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px 10px;
+            text-align: left;
+            vertical-align: top;
+        }
+
+        th { background: #3498db; color: white; font-weight: 600; }
+        tr:nth-child(even) { background: #f8f9fa; }
+
+        code {
+            background: #f4f4f4;
+            padding: 2px 6px;
+            border-radius: 3px;
+            font-family: 'Consolas', 'Monaco', monospace;
+            font-size: 9.5pt;
+        }
+
+        pre {
+            background: #2c3e50;
+            color: #ecf0f1;
+            padding: 15px;
+            border-radius: 6px;
+            overflow-x: auto;
+            font-size: 9pt;
+            line-height: 1.5;
+            page-break-inside: avoid;
+        }
+
+        pre code { background: none; padding: 0; color: inherit; }
+
+        .highlight-box {
+            background: #e8f4fd;
+            border-left: 4px solid #3498db;
+            padding: 15px;
+            margin: 15px 0;
+            border-radius: 0 4px 4px 0;
+        }
+
+        .feature-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 15px;
+            margin: 20px 0;
+        }
+
+        .feature-card {
+            background: #fff;
+            border: 1px solid #e0e0e0;
+            border-radius: 6px;
+            padding: 15px;
+            page-break-inside: avoid;
+        }
+
+        .feature-card h4 { margin-top: 0; color: #3498db; }
+
+        ul, ol { margin: 10px 0; padding-left: 25px; }
+        li { margin: 5px 0; }
+
+        .toc {
+            background: #f8f9fa;
+            border: 1px solid #e0e0e0;
+            border-radius: 6px;
+            padding: 20px;
+            margin: 20px 0;
+        }
+
+        .toc ul { list-style: none; padding: 0; }
+        .toc li { margin: 8px 0; }
+        .toc a { color: #3498db; text-decoration: none; }
+
+        .no-print { display: none; }
+
+        @media print {
+            body { padding: 0; }
+            .no-print { display: none; }
+            h1, h2, h3 { page-break-after: avoid; }
+            table, .feature-card, pre { page-break-inside: avoid; }
+        }
+    </style>
+</head>
+<body>
+    <button class="no-print" onclick="window.print()" style="position:fixed;top:20px;right:20px;padding:10px 20px;background:#3498db;color:white;border:none;border-radius:4px;cursor:pointer;font-size:14px;z-index:1000;">🖨️ Print / Save as PDF</button>
+
+    <h1>TradeSim — Project Report</h1>
+    <p style="font-size:12pt;color:#7f8c8d;margin-top:-10px;"><strong>Spring Boot + JavaFX Trading Simulator</strong> | Java 21 | Maven | SQLite</p>
+
+    <div class="toc">
+        <h3 style="margin-top:0;">📑 Table of Contents</h3>
+        <ul>
+            <li><a href="#identity">1. Project Identity</a></li>
+            <li><a href="#structure">2. Project Structure</a></li>
+            <li><a href="#features">3. Core Features</a></li>
+            <li><a href="#database">4. Database Schema</a></li>
+            <li><a href="#team">5. Team Division (4 Persons)</a></li>
+            <li><a href="#tech">6. Technical Highlights</a></li>
+            <li><a href="#run">7. How to Run</a></li>
+            <li><a href="#api">8. REST API Reference</a></li>
+            <li><a href="#talking">9. Report Talking Points</a></li>
+            <li><a href="#extensibility">10. Extensibility</a></li>
+            <li><a href="#deliverables">11. Deliverables Checklist</a></li>
+            <li><a href="#viva">12. Viva Preparation</a></li>
+        </ul>
+    </div>
+
+    <hr style="margin:30px 0;border:none;border-top:1px solid #eee;">
+
+    <section id="identity">
+        <h2>1. Project Identity</h2>
+        <table>
+            <tr><th>Aspect</th><th>Details</th></tr>
+            <tr><td><strong>Name</strong></td><td>TradeSim — Spring Boot + JavaFX Trading Simulator</td></tr>
+            <tr><td><strong>Type</strong></td><td>Hybrid: Desktop App (JavaFX) + REST API Server (Spring Boot)</td></tr>
+            <tr><td><strong>Language</strong></td><td>Java 21 (LTS)</td></tr>
+            <tr><td><strong>Build Tool</strong></td><td>Maven 3.9+</td></tr>
+            <tr><td><strong>Database</strong></td><td>SQLite (embedded, file-based: <code>tradesim.db</code>)</td></tr>
+            <tr><td><strong>Architecture</strong></td><td>Layered: UI → Database/Service → Model (POJOs)</td></tr>
+            <tr><td><strong>Frameworks</strong></td><td>Spring Boot 3.3, JavaFX 23, SQLite JDBC 3.49</td></tr>
+        </table>
+    </section>
+
+    <section id="structure">
+        <h2>2. Project Structure</h2>
+        <pre><code>TradeSim/
+├── pom.xml                          # Maven config (Spring Boot + JavaFX + SQLite)
+├── TradeSim.iml                     # IntelliJ module file
+├── PROJECT_SUMMARY.md               # Full documentation
+└── src/
+    ├── main/
+    │   ├── java/com/tradesim/tradesim/
+    │   │   ├── TradeSimApp.java           # JavaFX + Spring Boot launcher
+    │   │   ├── SpringBootApp.java         # Spring Boot REST API entry point
+    │   │   ├── module-info.java           # Java 9+ module declarations
+    │   │   ├── db/Database.java           # Spring @Component, all SQL operations
+    │   │   ├── model/                     # POJO data models (5 classes)
+    │   │   │   ├── User.java
+    │   │   │   ├── Stock.java
+    │   │   │   ├── Holding.java
+    │   │   │   ├── Order.java
+    │   │   │   └── LedgerEntry.java
+    │   │   ├── ui/MainWindow.java         # JavaFX UI: Login + 4 Tabs
+    │   │   └── controller/                # Spring REST Controllers (3)
+    │   │       ├── StockRestController.java
+    │   │       ├── TradeRestController.java
+    │   │       └── PortfolioRestController.java
+    │   └── resources/
+    │       └── styles.css                 # Minimal JavaFX styling
+    └── test/                              # Ready for JUnit/TestFX</code></pre>
+    </section>
+
+    <section id="features">
+        <h2>3. Core Features</h2>
+
+        <h3>🖥️ JavaFX Desktop Application (4 Tabs)</h3>
+        <div class="feature-grid">
+            <div class="feature-card">
+                <h4>📊 Market Tab</h4>
+                <ul>
+                    <li>Live stock table (5 columns: Symbol, Name, Price, Sector)</li>
+                    <li>"Refresh Prices" button — simulates ±2% random walk</li>
+                    <li>Persists price changes to SQLite database</li>
+                    <li>TableView with ObservableList data binding</li>
+                </ul>
+            </div>
+            <div class="feature-card">
+                <h4>💹 Trade Tab</h4>
+                <ul>
+                    <li>Stock dropdown (ComboBox) loaded from DB</li>
+                    <li>Side: BUY / SELL | Type: MARKET / LIMIT</li>
+                    <li>Dynamic UI: Limit price field enables only for LIMIT</li>
+                    <li>Validation: qty > 0, cash check for BUY</li>
+                    <li>0.1% transaction fee</li>
+                    <li>MARKET orders fill instantly; updates cash + holdings</li>
+                </ul>
+            </div>
+            <div class="feature-card">
+                <h4>💼 Portfolio Tab</h4>
+                <ul>
+                    <li>Holdings table: Symbol, Name, Qty, Avg Price, Current, Value, P&L</li>
+                    <li>Computed columns: <code>value = qty × current</code>, <code>P&L = qty × (current - avg)</code></li>
+                    <li>Refresh button reloads from database</li>
+                    <li>P&L column ready for color coding (green/red)</li>
+                </ul>
+            </div>
+            <div class="feature-card">
+                <h4>📜 Orders Tab</h4>
+                <ul>
+                    <li>Order history: ID, Symbol, Side, Type, Qty, Price, Status</li>
+                    <li>Shows PENDING, FILLED, CANCELLED</li>
+                    <li>Ordered by most recent first (DESC)</li>
+                    <li>Refresh button</li>
+                </ul>
+            </div>
+        </div>
+
+        <h3>🌐 Spring Boot REST API (Port 8080)</h3>
+        <table>
+            <tr><th>Endpoint</th><th>Method</th><th>Description</th></tr>
+            <tr><td><code>/api/stocks</code></td><td>GET</td><td>All stocks with current prices</td></tr>
+            <tr><td><code>/api/stocks/{symbol}</code></td><td>GET</td><td>Single stock detail</td></tr>
+            <tr><td><code>/api/stocks/{symbol}/price</code></td><td>GET</td><td>Current price only</td></tr>
+            <tr><td><code>/api/stocks/{symbol}/refresh</code></td><td>POST</td><td>Simulate price change (±2%)</td></tr>
+            <tr><td><code>/api/trade/order</code></td><td>POST</td><td>Place order (JSON body)</td></tr>
+            <tr><td><code>/api/trade/orders</code></td><td>GET</td><td>Order history</td></tr>
+            <tr><td><code>/api/portfolio</code></td><td>GET</td><td>Full portfolio: cash, total value, P&L, holdings</td></tr>
+        </table>
+    </section>
+
+    <section id="database">
+        <h2>4. Database Schema (SQLite)</h2>
+        <pre><code>-- Auto-created on first run (Database.init())
+
+CREATE TABLE users (
+    id INTEGER PRIMARY KEY,
+    username TEXT UNIQUE,
+    password TEXT,
+    cash REAL DEFAULT 10000
+);
+
+CREATE TABLE stocks (
+    symbol TEXT PRIMARY KEY,
+    name TEXT,
+    price REAL,
+    sector TEXT
+);
+
+CREATE TABLE holdings (
+    user_id INTEGER,
+    symbol TEXT,
+    qty INTEGER,
+    avg_price REAL,
+    PRIMARY KEY (user_id, symbol)
+);
+
+CREATE TABLE orders (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    user_id INTEGER,
+    symbol TEXT,
+    side TEXT,        -- BUY / SELL
+    type TEXT,        -- MARKET / LIMIT
+    qty INTEGER,
+    price REAL,
+    status TEXT DEFAULT 'PENDING'  -- PENDING / FILLED / CANCELLED
+);
+
+-- Seed data (run on startup):
+-- User: demo / demo123 (cash: $10,000)
+-- Stocks: AAPL($175), GOOGL($142), MSFT($378), TSLA($248), AMZN($155)</code></pre>
+    </section>
+
+    <section id="team">
+        <h2>5. Team Division (4 Persons)</h2>
+        <table>
+            <tr><th>Person</th><th>Module</th><th>Primary Code</th><th>Key Concepts Demonstrated</th></tr>
+            <tr>
+                <td><strong>1</strong></td>
+                <td>Market</td>
+                <td><code>MainWindow.marketTab()</code></td>
+                <td>TableView, ObservableList, Button event, Timeline (auto-refresh), random price simulation, DB read/write</td>
+            </tr>
+            <tr>
+                <td><strong>2</strong></td>
+                <td>Trade</td>
+                <td><code>MainWindow.tradeTab()</code></td>
+                <td>ComboBox, TextField validation, dynamic UI (limit price enable/disable), MARKET vs LIMIT logic, transaction (cash + holdings + orders)</td>
+            </tr>
+            <tr>
+                <td><strong>3</strong></td>
+                <td>Portfolio</td>
+                <td><code>MainWindow.portfolioTab()</code></td>
+                <td>TableView with computed columns (value, P&L), model methods (value(), pnl()), refresh pattern</td>
+            </tr>
+            <tr>
+                <td><strong>4</strong></td>
+                <td>Orders</td>
+                <td><code>MainWindow.ordersTab()</code></td>
+                <td>Order history display, status tracking, simple TableView refresh</td>
+            </tr>
+        </table>
+
+        <div class="highlight-box">
+            <strong>Shared Components (all 4 understand):</strong>
+            <ul style="margin:10px 0;">
+                <li><code>Database.java</code> — Spring <code>@Component</code>, all SQL (CRUD + transactions)</li>
+                <li>4 Model POJOs — <code>User</code>, <code>Stock</code>, <code>Holding</code>, <code>Order</code></li>
+                <li><code>TradeSimApp.java</code> — JavaFX + Spring Boot lifecycle integration</li>
+                <li><code>module-info.java</code> — JPMS config for Spring/JavaFX reflection</li>
+            </ul>
+        </div>
+    </section>
+
+    <section id="tech">
+        <h2>6. Technical Highlights</h2>
+        <table>
+            <tr><th>Category</th><th>Details</th></tr>
+            <tr>
+                <td><strong>Spring Integration</strong></td>
+                <td><code>@Component</code> Database, <code>@PostConstruct</code> init, <code>@PreDestroy</code> close, <code>SpringApplicationBuilder</code> in JavaFX <code>init()</code></td>
+            </tr>
+            <tr>
+                <td><strong>JavaFX</strong></td>
+                <td>TabPane, TableView, ComboBox, TextField, Button, Label, VBox/HBox/BorderPane, Alert dialogs, ObservableList binding</td>
+            </tr>
+            <tr>
+                <td><strong>Event Handling</strong></td>
+                <td>Button <code>onAction</code>, ComboBox <code>valueProperty().addListener</code>, TableView selection, auto-refresh via Timeline</td>
+            </tr>
+            <tr>
+                <td><strong>Database</strong></td>
+                <td>SQLite JDBC, PreparedStatements, manual transactions, UPSERT for holdings (<code>ON CONFLICT DO UPDATE</code>)</td>
+            </tr>
+            <tr>
+                <td><strong>Module System (JPMS)</strong></td>
+                <td><code>module-info.java</code> with <code>opens</code> for Spring/JavaFX reflection access to private fields</td>
+            </tr>
+            <tr>
+                <td><strong>Build</strong></td>
+                <td><code>spring-boot-maven-plugin</code> (repackage), <code>javafx-maven-plugin</code>, shade for fat JAR</td>
+            </tr>
+            <tr>
+                <td><strong>Core Java</strong></td>
+                <td>Streams API (portfolio calculations), Generics (<code><T> col(title, Function<T,String>)</code>), Try-with-resources, Custom exceptions in REST layer</td>
+            </tr>
+        </table>
+    </section>
+
+    <section id="run">
+        <h2>7. How to Run</h2>
+
+        <h3>Option A: IntelliJ IDEA (Recommended)</h3>
+        <ol>
+            <li>File → Open → Select <code>pom.xml</code></li>
+            <li>Wait for Maven import (auto-downloads dependencies)</li>
+            <li>Run <code>TradeSimApp</code> class (green play button)</li>
+            <li>Launches Spring Boot on port 8080 + JavaFX window</li>
+            <li>Login: <code>demo</code> / <code>demo123</code></li>
+        </ol>
+
+        <h3>Option B: Command Line (Maven installed)</h3>
+        <pre><code>cd TradeSim
+mvn clean package -DskipTests
+java -jar target/TradeSim-1.0.0.jar</code></pre>
+
+        <h3>Option C: API-Only Mode (No JavaFX)</h3>
+        <pre><code># Run SpringBootApp class directly in IDE
+# Or:
+java -jar target/TradeSim-1.0.0.jar --spring.main.web-application-type=servlet</code></pre>
+    </section>
+
+    <section id="api">
+        <h2>8. REST API Reference</h2>
+
+        <h3>Stock Market Data</h3>
+        <pre><code># Get all stocks
+GET http://localhost:8080/api/stocks
+
+# Get single stock
+GET http://localhost:8080/api/stocks/AAPL
+
+# Get price only
+GET http://localhost:8080/api/stocks/AAPL/price
+
+# Simulate price refresh
+POST http://localhost:8080/api/stocks/AAPL/refresh</code></pre>
+
+        <h3>Trading</h3>
+        <pre><code># Place MARKET BUY order
+POST http://localhost:8080/api/trade/order
+Content-Type: application/json
+{"symbol":"AAPL","side":"BUY","type":"MARKET","qty":10,"price":0}
+
+# Place LIMIT SELL order
+POST http://localhost:8080/api/trade/order
+Content-Type: application/json
+{"symbol":"TSLA","side":"SELL","type":"LIMIT","qty":5,"price":260}
+
+# Get order history
+GET http://localhost:8080/api/trade/orders</code></pre>
+
+        <h3>Portfolio</h3>
+        <pre><code>GET http://localhost:8080/api/portfolio
+
+# Response:
+{
+  "cash": 8500.00,
+  "totalValue": 12500.00,
+  "totalPnl": 1200.50,
+  "holdings": [
+    {"symbol":"AAPL","name":"Apple","qty":10,"avgPrice":170,"curPrice":175,"value":1750,"pnl":50}
+  ]
+}</code></pre>
+    </section>
+
+    <section id="talking">
+        <h2>9. Report Talking Points</h2>
+
+        <div class="highlight-box">
+            <h4>🏆 For "Advanced Project" Claim</h4>
+            <ul>
+                <li><strong>Hybrid Architecture:</strong> Single codebase runs as both desktop app and REST API server</li>
+                <li><strong>Spring Boot 3:</strong> Dependency injection, component lifecycle, REST controllers, actuator health checks</li>
+                <li><strong>JavaFX 23:</strong> Modern UI with TableView, data binding, event-driven updates</li>
+                <li><strong>Embedded Database:</strong> Zero-config SQLite with schema migration on startup</li>
+                <li><strong>Module System:</strong> Proper JPMS configuration for Spring + JavaFX interop</li>
+            </ul>
+        </div>
+
+        <div class="highlight-box">
+            <h4>💻 For "Core Java Skills" Claim</h4>
+            <ul>
+                <li><strong>OOP:</strong> Encapsulated models, separation of concerns (UI/DB/Model)</li>
+                <li><strong>Concurrency:</strong> JavaFX <code>Platform.runLater</code>, <code>Timeline</code> for price simulation</li>
+                <li><strong>Collections:</strong> <code>ObservableList</code>, Stream API for portfolio calculations</li>
+                <li><strong>Exception Handling:</strong> Try-with-resources, custom exceptions in REST layer</li>
+                <li><strong>Generics:</strong> TableColumn factory method <code><T> col(title, Function<T,String>)</code></li>
+            </ul>
+        </div>
+
+        <div class="highlight-box">
+            <h4>👥 For "Team Work" Claim</h4>
+            <ul>
+                <li><strong>Clean module boundaries:</strong> Each person owns one tab method (~30-40 lines)</li>
+                <li><strong>Shared contracts:</strong> Models define data shape; Database defines persistence API</li>
+                <li><strong>Integration:</strong> All tabs use same <code>Database</code> bean; Spring manages lifecycle</li>
+            </ul>
+        </div>
+    </section>
+
+    <section id="extensibility">
+        <h2>10. Extensibility (Future Work)</h2>
+        <table>
+            <tr><th>Feature</th><th>Effort</th><th>Where to Add</th></tr>
+            <tr><td>User registration / auth</td><td>Low</td><td><code>Database.createUser()</code>, REST <code>/api/auth/register</code>, Spring Security</td></tr>
+            <tr><td>JWT authentication</td><td>Medium</td><td>Spring Security filter, token storage in JavaFX</td></tr>
+            <tr><td>Real-time prices (WebSocket)</td><td>Medium</td><td>Spring WebSocket + JavaFX listener</td></tr>
+            <tr><td>Portfolio history charts</td><td>Low</td><td>JavaFX LineChart + scheduled DB snapshots</td></tr>
+            <tr><td>Unit / Integration tests</td><td>Low</td><td>JUnit 5 + TestFX + MockMvc (test dir ready)</td></tr>
+            <tr><td>Multiple users / sessions</td><td>Medium</td><td>Session management, user-specific data isolation</td></tr>
+        </table>
+    </section>
+
+    <section id="deliverables">
+        <h2>11. Deliverables Checklist</h2>
+        <ul>
+            <li>✅ <strong>Source Code</strong> — 12 <code>.java</code> files (8 core + 3 REST + 1 config)</li>
+            <li>✅ <strong>Maven Build</strong> — <code>pom.xml</code> with all dependencies</li>
+            <li>✅ <strong>Documentation</strong> — <code>PROJECT_SUMMARY.md</code> + this report</li>
+            <li>✅ <strong>Runnable JAR</strong> — Fat JAR with shade plugin (<code>target/TradeSim-1.0.0.jar</code>)</li>
+            <li>✅ <strong>Module Config</strong> — <code>module-info.java</code> for JPMS</li>
+            <li>✅ <strong>Database</strong> — Auto-creates <code>tradesim.db</code> on first run</li>
+            <li>✅ <strong>4-Person Division</strong> — Equal ownership, clear boundaries</li>
+            <li>✅ <strong>Event Handling</strong> — Buttons, ComboBoxes, Listeners, TableView selection</li>
+            <li>✅ <strong>JavaFX</strong> — 4 tabs, TableView, forms, dialogs</li>
+            <li>✅ <strong>Database</strong> — SQLite, CRUD, transactions, UPSERT</li>
+            <li>✅ <strong>Rich Operations</strong> — Trading, portfolio P&L, order history, price simulation</li>
+            <li>✅ <strong>Spring Boot Bonus</strong> — REST API layer, DI, lifecycle</li>
+        </ul>
+    </section>
+
+    <section id="viva">
+        <h2>12. Viva Preparation — What Each Person Can Explain</h2>
+        <table>
+            <tr><th>Person</th><th>"My Module"</th><th>"How It Connects"</th><th>"Spring/JavaFX Used"</th></tr>
+            <tr>
+                <td><strong>1</strong></td>
+                <td>Market tab — live table, price refresh button, random ±2% simulation</td>
+                <td>Reads <code>Database.allStocks()</code>, writes <code>updatePrice()</code></td>
+                <td>TableView, Timeline (auto-refresh), Button <code>onAction</code>, ObservableList</td>
+            </tr>
+            <tr>
+                <td><strong>2</strong></td>
+                <td>Trade tab — order form, validation, MARKET vs LIMIT, 0.1% fee</td>
+                <td>Calls <code>placeOrder()</code>, <code>fillOrder()</code> updates cash/holdings/orders</td>
+                <td>ComboBox <code>valueProperty</code> listener, form validation, transaction logic</td>
+            </tr>
+            <tr>
+                <td><strong>3</strong></td>
+                <td>Portfolio tab — holdings table with computed Value & P&L columns</td>
+                <td>Reads <code>getHoldings()</code>, computes in model (<code>value()</code>, <code>pnl()</code>)</td>
+                <td>TableView computed columns, model methods, refresh pattern</td>
+            </tr>
+            <tr>
+                <td><strong>4</strong></td>
+                <td>Orders tab — history table with status (PENDING/FILLED/CANCELLED)</td>
+                <td>Reads <code>getOrders()</code></td>
+                <td>Simple TableView display, refresh button</td>
+            </tr>
+        </table>
+
+        <h3>All 4 Can Explain (Shared)</h3>
+        <ul>
+            <li><strong>Spring:</strong> <code>@Component</code> lifecycle, <code>@PostConstruct</code>/<code>@PreDestroy</code>, DI in REST controllers</li>
+            <li><strong>JavaFX:</strong> <code>Application</code> lifecycle (<code>init</code>/<code>start</code>/<code>stop</code>), FXML-free UI construction</li>
+            <li><strong>Database:</strong> SQLite JDBC, PreparedStatements, transactions, UPSERT syntax</li>
+            <li><strong>Module System:</strong> <code>opens</code> for Spring/JavaFX reflection, <code>requires</code> for module deps</li>
+            <li><strong>Build:</strong> Maven multi-plugin (spring-boot, javafx, shade), fat JAR creation</li>
+        </ul>
+    </section>
+
+    <hr style="margin:40px 0;border:none;border-top:1px solid #eee;">
+    <p style="text-align:center;color:#7f8c8d;font-size:10pt;">
+        TradeSim — Spring Boot + JavaFX Trading Simulator<br>
+        Generated for academic assignment submission | Java 21 | Maven | SQLite
+    </p>
+</body>
+</html>
